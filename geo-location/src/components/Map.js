@@ -1,47 +1,55 @@
-import React, { useState } from "react";
-import {
-  GoogleMap,
-  AdvancedMarkerElement,
-  InfoWindow,
-} from "@googlemaps/google-maps-services-js"; // Using AdvancedMarkerElement
-import { useLoadScript } from "@react-google-maps/api";
-import axios from "axios/axios";
+import React, { useState, useEffect } from "react";
+import { GoogleMap, Marker, InfoWindow } from "@react-google-maps/api";
 
-const libraries = ["places"]; // Include the Places library for geocoding
-const google_api = "AIzaSyA2l5gu6xLq6SRnoj4vTWsqyHSD75WJAuc";
-console.log("google_api", google_api);
+import { useLoadScript } from "@react-google-maps/api";
+
+const libraries = ["places"];
+const google_api = "AIzaSyA2l5gu6xLq6SRnoj4vTWsqyHSD75WJAuc"; // Replace with your API key
 
 const Map = ({ center, zoom, markers, onMarkerClick }) => {
   const [selectedMarker, setSelectedMarker] = useState(null);
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: google_api, // Replace with your API key
+    googleMapsApiKey: google_api,
     libraries,
   });
 
-  if (loadError) return "Error loading maps";
-  if (!isLoaded) return <div>Loading...</div>;
+  useEffect(() => {
+    if (loadError) {
+      console.error("Error loading maps:", loadError);
+    }
+  }, [loadError]);
 
-  return (
-    <GoogleMap
-      mapContainerStyle={{ width: "100%", height: "400px" }}
-      zoom={zoom}
-      center={center}
-    >
-      {markers.map((marker) => (
-        <AdvancedMarkerElement // Using AdvancedMarkerElement
-          key={marker.id}
-          position={marker.position}
-          onClick={() => onMarkerClick(marker)}
-        >
-          {selectedMarker === marker && (
-            <InfoWindow onCloseClick={() => setSelectedMarker(null)}>
-              <div>{marker.infoWindow}</div>
-            </InfoWindow>
-          )}
-        </AdvancedMarkerElement>
-      ))}
-    </GoogleMap>
-  );
+  const renderMap = () => {
+    return (
+      <div>
+        {isLoaded ? (
+          <GoogleMap
+            mapContainerStyle={{ width: "100%", height: "800px" }}
+            zoom={zoom}
+            center={center}
+          >
+            {markers.map((marker) => (
+              <Marker
+                key={marker.id}
+                position={marker.position}
+                onClick={() => onMarkerClick(marker)}
+              >
+                {selectedMarker === marker && (
+                  <InfoWindow onCloseClick={() => setSelectedMarker(marker.id)}>
+                    <div>{marker.infoWindow}</div>
+                  </InfoWindow>
+                )}
+              </Marker>
+            ))}
+          </GoogleMap>
+        ) : (
+          <div>Loading...</div>
+        )}
+      </div>
+    );
+  };
+
+  return isLoaded ? renderMap() : <div>Loading...</div>;
 };
 
 export default Map;

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Map from "./components/Map";
 import { InfoWindow } from "@react-google-maps/api";
-import axios from 'axios/axios';
 
 const App = () => {
   const kenyaCenter = { lat: 1.2921, lng: 36.8219 }; // Coordinates for Kenya
