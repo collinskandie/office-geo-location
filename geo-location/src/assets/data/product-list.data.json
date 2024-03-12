@@ -1,0 +1,18 @@
+[
+    {
+        "id": 1,
+        "name": "Bronce Internet Package",
+        "image": "/img/thumbs/thumb-8.jpg",
+        "category": "internet",
+        "price": 3000,
+        "speed": 20
+    },
+    {
+        "id": 2,
+        "name": "Silver Internet Package",
+        "image": "/img/thumbs/thumb-7.jpg",
+        "category": "internet",
+        "price": 4500,
+        "speed": 40
+    }
+]
