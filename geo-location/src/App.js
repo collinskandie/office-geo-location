@@ -90,8 +90,8 @@ const App = () => {
   };
 
   return (
-    <div>
-      <h1>NTSA Regional Offices</h1>
+    <div> 
+      <h1>NTSA Regional Offices GoogleMap</h1>
       <Map
         center={kenyaCenter}
         zoom={zoom}

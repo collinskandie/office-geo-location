@@ -4,9 +4,11 @@ import { GoogleMap, Marker, InfoWindow } from "@react-google-maps/api";
 import { useLoadScript } from "@react-google-maps/api";
 
 const libraries = ["places"];
-const google_api = "AIzaSyA2l5gu6xLq6SRnoj4vTWsqyHSD75WJAuc"; // Replace with your API key
+const google_api = process.env.REACT_APP_GOOGLE_API_KEY; // Replace with your API key
+console.log(google_api);
 
 const Map = ({ center, zoom, markers, onMarkerClick }) => {
+  const [isMounted, setIsMounted] = useState(false);
   const [selectedMarker, setSelectedMarker] = useState(null);
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: google_api,
@@ -17,6 +19,7 @@ const Map = ({ center, zoom, markers, onMarkerClick }) => {
     if (loadError) {
       console.error("Error loading maps:", loadError);
     }
+    setIsMounted(true);
   }, [loadError]);
 
   const renderMap = () => {
@@ -28,6 +31,14 @@ const Map = ({ center, zoom, markers, onMarkerClick }) => {
             zoom={zoom}
             center={center}
           >
+            {isMounted &&
+              markers.map((marker) => (
+                <Marker
+                  key={marker.id}
+                  position={marker.position}
+                  onClick={() => onMarkerClick(marker)}
+                />
+              ))}
             {markers.map((marker) => (
               <Marker
                 key={marker.id}
